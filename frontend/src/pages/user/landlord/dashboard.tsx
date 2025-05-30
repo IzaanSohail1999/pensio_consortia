@@ -1,10 +1,14 @@
-// src/pages/user/dashboard.tsx
 import React from 'react';
+import { useUser } from '@/context/UserContext';
 
 const Dashboard = () => {
+  const { user } = useUser();
+
   return (
     <div className="space-y-8">
-      <h1 className="text-2xl font-semibold ml-10">Hello, Teresa Landlord</h1>
+      <h1 className="text-2xl font-semibold ml-10">
+        {user ? `Hello, ${user.fullname}` : 'Hello, Landlord'}
+      </h1>
 
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
         <DashboardCard title="Listed Properties" description="Manage your properties" stat="24 Listed" />

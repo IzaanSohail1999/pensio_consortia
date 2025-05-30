@@ -1,9 +1,11 @@
 import React from 'react';
 import styles from '@/styles/style.module.css';
 import { useRouter } from 'next/router';
+import { useUser } from '@/context/UserContext';
 
 const TenantDashboard = () => {
   const router = useRouter();
+  const { user } = useUser();
 
   const cards = [
     {
@@ -18,23 +20,23 @@ const TenantDashboard = () => {
       button: 'View History',
       onClick: () => router.push('/user/tenant/payment-history'),
     },
-    {
-      title: 'Wallet Management',
-      desc: 'View your wallet balance and transaction history',
-      button: 'View Wallet',
-      onClick: () => router.push('/user/tenant/wallet'),
-    },
+    // {
+    //   title: 'Wallet Management',
+    //   desc: 'View your wallet balance and transaction history',
+    //   button: 'View Wallet',
+    //   onClick: () => router.push('/user/tenant/wallet'),
+    // },
   ];
 
   return (
     <div className={styles.page}>
       <div className={styles.pageHeader}>
-        <h1 className={styles.pageTitle}>Hello, Teresa Tenant</h1>
-        <div className={styles.searchBar}>
+        <h1 className={styles.pageTitle}>{user ? `Hello, ${user.fullname}` : 'Hello, Tenant'}</h1>
+        {/* <div className={styles.searchBar}>
           <span className={styles.searchIcon}>☰</span>
           <input type="text" placeholder="Search" />
           <span className={styles.searchIcon}>🔍</span>
-        </div>
+        </div> */}
       </div>
 
       <div className={styles.cardGrid}>

@@ -1,18 +1,19 @@
 const express = require('express');
 const router = express.Router();
-const User = require('../models/User');
+const {
+        registerUser, 
+        loginUser, 
+        getAllUsers, 
+        getOneUser, 
+        updateUser, 
+        deleteUser
+    } = require('../controllers/userController')
 
-// GET all users
-router.get('/', async (req, res) => {
-  const users = await User.find();
-  res.json(users);
-});
-
-// POST create user
-router.post('/', async (req, res) => {
-  const { name, email } = req.body;
-  const user = await User.create({ name, email });
-  res.status(201).json(user);
-});
+router.post('/register', registerUser);
+router.post('/login', loginUser);
+router.get('/getAllUsers', getAllUsers)
+router.get('/:username', getOneUser)
+router.put('/username/:username', updateUser);
+router.delete('/username/:username', deleteUser);
 
 module.exports = router;

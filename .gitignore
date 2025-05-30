@@ -33,6 +33,7 @@ Desktop.ini
 /backend/.env
 /backend/.env.local
 /backend/.env.*.local
+/backend/uploads
 
 # Prisma generated files
 /frontend/prisma/dev.db

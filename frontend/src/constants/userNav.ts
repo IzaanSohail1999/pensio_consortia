@@ -9,7 +9,7 @@ export const navItems = {
       { icon: '🏠', label: 'Dashboard', path: '/user/tenant/dashboard' },
     { icon: '📤', label: 'Payment Invoice Upload', path: '/user/tenant/invoice-upload' },
     { icon: '📄', label: 'Payment History / NFTs', path: '/user/tenant/payment-history' },
-    { icon: '💰', label: 'Wallet Management', path: '/user/tenant/wallet' },
+    // { icon: '💰', label: 'Wallet Management', path: '/user/tenant/wallet' },
   ],
 };
 

@@ -1,17 +1,67 @@
 // pages/admin/users.tsx
-import React from 'react';
+import React, { useState, useEffect } from 'react';
+
+type User = {
+  _id: string;
+  fullName: string;
+  email: string;
+  username: string;
+};
 
 const UsersPage = () => {
+
+  const [users, setUsers] = useState<User[]>([]);
+  const [searchTerm, setSearchTerm] = useState('');
+
+  const fetchAllUsers = async () => {
+    try {
+      const res = await fetch('http://localhost:5000/api/users/getAllUsers');
+      const data = await res.json();
+      if (res.ok && Array.isArray(data)) {
+        setUsers(data);
+      }
+    } catch (error) {
+      console.error('Failed to fetch users:', error);
+    }
+  };
+
+  useEffect(() => {
+    fetchAllUsers();
+  }, []);
+
+  const deleteUser = async (username: string) => {
+    try {
+      const res = await fetch(`http://localhost:5000/api/users/username/${username}`, {
+        method: 'DELETE',
+      });
+
+      if (res.ok) {
+        alert('User deleted successfully!');
+        fetchAllUsers();
+      } else {
+        alert('Failed to delete user.');
+      }
+    } catch (error) {
+      console.error('Failed to delete user:', error);
+    }
+  }
+
+  const filteredUsers = users.filter(user =>
+    user.fullName.toLowerCase().includes(searchTerm.toLowerCase())
+  );
+
   return (
     <div className="p-4 md:p-10 text-white w-full overflow-x-auto">
-      <h1 className="text-3xl font-bold mb-2 ml-7">User Management</h1>
-      <p className="text-sm text-gray-300 mb-6 ml-7">Manage users and their roles</p>
+      <h1 className="text-3xl font-bold mb-6 ml-7">User Management</h1>
+      {/* <p className="text-sm text-gray-300 mb-6 ml-7">Manage users and their roles</p> */}
 
       <div className="bg-[#1e2a46] px-4 py-2 rounded-full max-w-full md:w-96 flex items-center gap-2 mb-6">
         <span className="text-lg">📋</span>
-        <input
+         <input
           type="text"
           placeholder="Search Users"
+          value={searchTerm}
+          onChange={(e) => setSearchTerm(e.target.value)}
           className="w-full bg-transparent text-sm placeholder-gray-400 focus:outline-none"
         />
         <span className="text-sm">🔍</span>
@@ -23,24 +73,35 @@ const UsersPage = () => {
             <tr>
               <th className="px-4 py-3">Name</th>
               <th className="px-4 py-3">Email</th>
-              <th className="px-4 py-3">Role</th>
-              <th className="px-4 py-3">Status</th>
+              {/* <th className="px-4 py-3">Role</th> */}
+              {/* <th className="px-4 py-3">Status</th> */}
+              <th className="px-4 py-3">Username</th>
               <th className="px-4 py-3">Actions</th>
             </tr>
           </thead>
           <tbody className="text-gray-200">
-            {Array(5).fill(null).map((_, i) => (
-              <tr key={i} className="border-t border-gray-700">
-                <td className="px-4 py-3">John Doe</td>
-                <td className="px-4 py-3">john.doe@example.com</td>
-                <td className="px-4 py-3">Landlord</td>
-                <td className="px-4 py-3">Active</td>
+            {filteredUsers.map((user) => (
+              <tr key={user._id} className="border-t border-gray-700">
+                <td className="px-4 py-3">{user.fullName}</td>
+                <td className="px-4 py-3">{user.email}</td>
+                <td className="px-4 py-3">{user.username || 'N/A'}</td>
                 <td className="px-4 py-3 flex gap-2">
-                  <button className="px-3 py-1 border border-white rounded-full text-sm">Edit</button>
-                  <button className="px-3 py-1 bg-red-500 rounded-full text-sm">Delete</button>
+                  <button
+                    className="px-3 py-1 bg-red-500 rounded-full text-sm"
+                    onClick={() => deleteUser(user.username)}
+                  >
+                    Delete
+                  </button>
                 </td>
               </tr>
             ))}
+            {filteredUsers.length === 0 && (
+              <tr>
+                <td colSpan={4} className="text-center text-gray-400 py-4">
+                  No users found.
+                </td>
+              </tr>
+            )}
           </tbody>
         </table>
       </div>

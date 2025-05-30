@@ -27,10 +27,22 @@ body {
 
 html, body {
   height: 100%;
+  overflow: hidden; /* prevents double scrollbar */
+}
+
+#__next {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
 }
 
 @media screen and (min-width: 1024px) {
-  html, body {
-    overflow: hidden;
+
+  html,
+  body {
+    min-height: 100vh;
+    overflow-x: hidden;
+    overflow-y: auto;
   }
+
 }

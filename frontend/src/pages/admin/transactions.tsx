@@ -1,51 +1,93 @@
 // pages/admin/transactions.tsx
-import React from 'react';
+import React, { useEffect, useState } from 'react';
+import styles from '@/styles/style.module.css';
 
 const TransactionsPage = () => {
+  const [transactions, setTransactions] = useState([]);
+  const [searchTerm, setSearchTerm] = useState('');
+
+  useEffect(() => {
+    const fetchInvoices = async () => {
+      try {
+        const res = await fetch('http://localhost:5000/api/invoices/getAllInvoices');
+        const data = await res.json();
+        if (res.ok && data.success) {
+          setTransactions(data.data);
+        } else {
+          console.error('Failed to fetch invoices:', data.message);
+        }
+      } catch (err) {
+        console.error('Error fetching invoices:', err);
+      }
+    };
+
+    fetchInvoices();
+  }, []);
+
+  // Filter transactions by full tenant name
+  const filteredTransactions = transactions.filter((t: any) =>
+    `${t.firstName} ${t.lastName}`.toLowerCase().includes(searchTerm.toLowerCase())
+  );
+
   return (
-    <div className="p-4 md:p-10 text-white w-full overflow-x-auto">
-      <h1 className="text-3xl font-bold mb-2 ml-7">Transaction Monitoring</h1>
-      <p className="text-sm text-gray-300 mb-6 ml-7">Monitor transactions and manage disputes</p>
+    <div className={styles.page}>
+      <h1 className={styles.pageTitle}>Transaction Monitoring</h1>
+      <p className={styles.pageSubtitle}>Monitor transactions and manage disputes</p>
 
       <div className="bg-[#1e2a46] px-4 py-2 rounded-full max-w-full md:w-96 flex items-center gap-2 mb-6">
         <span className="text-lg">📋</span>
         <input
           type="text"
-          placeholder="Search Transactions"
+          placeholder="Search Tenant Name"
+          value={searchTerm}
+          onChange={(e) => setSearchTerm(e.target.value)}
           className="w-full bg-transparent text-sm placeholder-gray-400 focus:outline-none"
         />
         <span className="text-sm">🔍</span>
       </div>
 
-      <div className="overflow-x-auto">
-        <table className="min-w-[700px] w-full text-left bg-[#1e2a46] rounded-md">
+      <div className={styles.tableWrapper}>
+        <table className={styles.table}>
           <thead className="text-white border-b border-gray-600">
             <tr>
-              <th className="px-4 py-3">Property</th>
-              <th className="px-4 py-3">Tenant</th>
-              <th className="px-4 py-3">Amount</th>
-              <th className="px-4 py-3">Date</th>
-              <th className="px-4 py-3">Status</th>
-              <th className="px-4 py-3">Actions</th>
+              <th>Date</th>
+              <th>Tenant Name</th>
+              <th>Email</th>
+              <th>Rent Address</th>
+              <th>Amount</th>
+              <th>Lease Term</th>
+              <th>Landlord</th>
+              {/* <th>Status</th> */}
+              <th>Invoice</th>
             </tr>
           </thead>
           <tbody className="text-gray-200">
-            {Array(5).fill(null).map((_, i) => (
-              <tr key={i} className="border-t border-gray-700">
-                <td className="px-4 py-3">123 Main Street, Abc Apartment, NY</td>
-                <td className="px-4 py-3">John Doe</td>
-                <td className="px-4 py-3">1500</td>
-                <td className="px-4 py-3">2024-06-01</td>
-                <td className="px-4 py-3">{i === 1 ? 'Pending' : 'Completed'}</td>
-                <td className="px-4 py-3">
-                  {i === 1 ? (
-                    <button className="px-3 py-1 border border-white rounded-full text-sm">Resolve Dispute</button>
-                  ) : (
-                    <span className="text-sm">No Dispute</span>
-                  )}
-                </td>
+            {filteredTransactions.length > 0 ? (
+              filteredTransactions.map((t: any, i: number) => (
+                <tr key={i}>
+                  <td>{new Date(t.createdAt).toLocaleDateString()}</td>
+                  <td>{t.firstName} {t.lastName}</td>
+                  <td>{t.email}</td>
+                  <td>{t.rentAddress}</td>
+                  <td>${t.rentAmount}</td>
+                  <td>{t.leaseTerm}</td>
+                  <td>{t.landlordFirstName} {t.landlordLastName}</td>
+                  <td>
+                    {t.screenshotUrl ? (
+                      <a className={styles.link} href={t.screenshotUrl} target="_blank" rel="noopener noreferrer">
+                        View
+                      </a>
+                    ) : (
+                      'No File'
+                    )}
+                  </td>
+                </tr>
+              ))
+            ) : (
+              <tr>
+                <td colSpan={8} style={{ textAlign: 'center' }}>No matching transactions found.</td>
               </tr>
-            ))}
+            )}
           </tbody>
         </table>
       </div>
