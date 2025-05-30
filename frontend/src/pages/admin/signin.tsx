@@ -6,11 +6,11 @@ import Image from 'next/image';
 import { useRouter } from 'next/router';
 import { useAdmin } from '@/context/AdminContext'; // ✅ use the context
 
-interface Props {
-    providers: any;
-}
+// interface Props {
+//     providers: any;
+// }
 
-const AdminSignIn = ({ providers }: Props) => {
+const AdminSignIn = () => {
   const router = useRouter();
   const { setAdmin } = useAdmin();
 
@@ -117,11 +117,11 @@ const AdminSignIn = ({ providers }: Props) => {
   );
 };
 
-export const getServerSideProps: GetServerSideProps = async () => {
-  const providers = await getProviders();
-  return {
-    props: { providers },
-  };
-};
+// export const getServerSideProps: GetServerSideProps = async () => {
+//   const providers = await getProviders();
+//   return {
+//     props: { providers },
+//   };
+// };
 
 export default AdminSignIn;

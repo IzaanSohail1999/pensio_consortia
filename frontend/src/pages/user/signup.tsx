@@ -7,7 +7,7 @@ const UserSignUp = () => {
   const [email, setEmail] = useState('');
   const [fullName, setFullName] = useState('');
   const [username, setUsername] = useState('');
-  const [role, setRole] = useState('');
+  // const [role, setRole] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const router = useRouter();
@@ -42,7 +42,7 @@ const UserSignUp = () => {
         setEmail('')
         setFullName('')
         setUsername('')
-        setRole('')
+        // setRole('')
         setPassword('')
         setConfirmPassword('')
         router.push('/user/signin');

@@ -2,8 +2,21 @@
 import React, { useEffect, useState } from 'react';
 import styles from '@/styles/style.module.css';
 
+type Transaction = {
+  createdAt: string;
+  firstName: string;
+  lastName: string;
+  email: string;
+  rentAddress: string;
+  rentAmount: number;
+  leaseTerm: string;
+  landlordFirstName: string;
+  landlordLastName: string;
+  screenshotUrl?: string;
+};
+
 const TransactionsPage = () => {
-  const [transactions, setTransactions] = useState([]);
+  const [transactions, setTransactions] = useState<Transaction[]>([]);
   const [searchTerm, setSearchTerm] = useState('');
 
   useEffect(() => {
@@ -63,7 +76,7 @@ const TransactionsPage = () => {
           </thead>
           <tbody className="text-gray-200">
             {filteredTransactions.length > 0 ? (
-              filteredTransactions.map((t: any, i: number) => (
+              filteredTransactions.map((t: Transaction, i: number) => (
                 <tr key={i}>
                   <td>{new Date(t.createdAt).toLocaleDateString()}</td>
                   <td>{t.firstName} {t.lastName}</td>

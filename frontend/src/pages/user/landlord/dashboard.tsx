@@ -1,6 +1,12 @@
 import React from 'react';
 import { useUser } from '@/context/UserContext';
 
+type DashboardCardProps = {
+  title: string;
+  description: string;
+  stat: string;
+};
+
 const Dashboard = () => {
   const { user } = useUser();
 
@@ -39,7 +45,7 @@ const Dashboard = () => {
   );
 };
 
-const DashboardCard = ({ title, description, stat }: any) => (
+const DashboardCard = ({ title, description, stat }: DashboardCardProps) => (
   <div className="bg-[#1e2a46] p-6 rounded-md shadow">
     <h3 className="text-lg font-semibold mb-1">{title}</h3>
     <p className="text-sm text-gray-400 mb-4">{description}</p>
