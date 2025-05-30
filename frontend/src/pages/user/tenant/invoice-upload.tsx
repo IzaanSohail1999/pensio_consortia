@@ -48,7 +48,7 @@ useEffect(() => {
   e.preventDefault();
 
   const form = new FormData();
-  form.append('email', user?.email);
+  form.append('email', user?.email ?? '');
   form.append('firstName', formData.firstName);
   form.append('lastName', formData.lastName);
   form.append('cellNumber', formData.cellNumber);
