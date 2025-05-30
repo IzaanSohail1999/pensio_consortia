@@ -60,7 +60,7 @@ const PaymentHistory = () => {
           </thead>
           <tbody>
             {transactions.length > 0 ? (
-              transactions.map((t: any, i: number) => (
+              transactions.map((t: Invoice, i: number) => (
                 <tr key={i}>
                   <td>{new Date(t.createdAt).toLocaleDateString()}</td>
                   <td>{t.firstName} {t.lastName}</td>
