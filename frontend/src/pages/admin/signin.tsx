@@ -1,5 +1,5 @@
-import { GetServerSideProps } from 'next';
-import { getProviders } from 'next-auth/react';
+// import { GetServerSideProps } from 'next';
+// import { getProviders } from 'next-auth/react';
 import { useState } from 'react';
 import Image from 'next/image';
 // import Link from 'next/link';

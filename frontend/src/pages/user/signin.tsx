@@ -40,8 +40,12 @@ const UserSignIn = () => {
       } else {
         setErrorMsg(data.message || 'Invalid credentials');
       }
-    } catch (err: any) {
-      setErrorMsg('Something went wrong' + err.message);
+    } catch (err: unknown) {
+      if (err instanceof Error) {
+        setErrorMsg(err.message || 'Something went wrong');
+      } else {
+        setErrorMsg('Something went wrong');
+      }
     }
   };
 

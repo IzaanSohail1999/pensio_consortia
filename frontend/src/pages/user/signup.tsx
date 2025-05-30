@@ -49,7 +49,12 @@ const UserSignUp = () => {
       } else {
         alert(`Error: ${data.message}`);
       }
-    } catch (err) {
+    } catch (err: unknown) {
+      if (err instanceof Error) {
+        alert(err.message || 'Something went wrong');
+      } else {
+        alert('Something went wrong');
+      }
       alert('Something went wrong.');
     }
   };

@@ -2,9 +2,22 @@ import React, { useEffect, useState } from 'react';
 import styles from '@/styles/style.module.css';
 import { useUser } from '@/context/UserContext';
 
+interface Invoice {
+  createdAt: string;
+  firstName: string;
+  lastName: string;
+  email: string;
+  rentAddress: string;
+  rentAmount: number;
+  leaseTerm: string;
+  landlordFirstName: string;
+  landlordLastName: string;
+  screenshotUrl?: string;
+}
+
 const PaymentHistory = () => {
-  const [transactions, setTransactions] = useState([]);
-    const { user } = useUser();
+  const [transactions, setTransactions] = useState<Invoice[]>([]);
+  const { user } = useUser();
 
   useEffect(() => {
     const fetchInvoices = async () => {
@@ -12,7 +25,7 @@ const PaymentHistory = () => {
         const res = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/invoices/getAllInvoices`);
         const data = await res.json();
         if (res.ok && data.success) {
-          const userInvoices = data.data.filter((t: any) => t.email === user?.email);
+          const userInvoices = data.data.filter((t: Invoice) => t.email === user?.email);
           setTransactions(userInvoices);
         } else {
           console.error('Failed to fetch invoices:', data.message);
@@ -23,7 +36,7 @@ const PaymentHistory = () => {
     };
 
     fetchInvoices();
-  }, []);
+  }, [user?.email]);
 
   return (
     <div className={styles.page}>

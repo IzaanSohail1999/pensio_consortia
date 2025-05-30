@@ -36,8 +36,12 @@ const AdminSignUp = () => {
       } else {
         setErrorMsg(data.message || 'Registration failed');
       }
-    } catch (err: any) {
-      setErrorMsg('Something went wrong' + err.message);
+    } catch (err: unknown) {
+      if (err instanceof Error) {
+        setErrorMsg(err.message || 'Something went wrong');
+      } else {
+        setErrorMsg('Something went wrong');
+      }
     }
   };
 

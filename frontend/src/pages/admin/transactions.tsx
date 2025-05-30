@@ -38,7 +38,7 @@ const TransactionsPage = () => {
   }, []);
 
   // Filter transactions by full tenant name
-  const filteredTransactions = transactions.filter((t: any) =>
+  const filteredTransactions = transactions.filter((t: Transaction) =>
     `${t.firstName} ${t.lastName}`.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
