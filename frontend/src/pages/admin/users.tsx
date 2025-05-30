@@ -15,7 +15,7 @@ const UsersPage = () => {
 
   const fetchAllUsers = async () => {
     try {
-      const res = await fetch('http://localhost:5000/api/users/getAllUsers');
+      const res = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/users/getAllUsers`);
       const data = await res.json();
       if (res.ok && Array.isArray(data)) {
         setUsers(data);
@@ -31,7 +31,7 @@ const UsersPage = () => {
 
   const deleteUser = async (username: string) => {
     try {
-      const res = await fetch(`http://localhost:5000/api/users/username/${username}`, {
+      const res = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/users/username/${username}`, {
         method: 'DELETE',
       });
 

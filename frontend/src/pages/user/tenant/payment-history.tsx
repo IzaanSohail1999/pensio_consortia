@@ -9,7 +9,7 @@ const PaymentHistory = () => {
   useEffect(() => {
     const fetchInvoices = async () => {
       try {
-        const res = await fetch('http://localhost:5000/api/invoices/getAllInvoices');
+        const res = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/invoices/getAllInvoices`);
         const data = await res.json();
         if (res.ok && data.success) {
           const userInvoices = data.data.filter((t: any) => t.email === user?.email);

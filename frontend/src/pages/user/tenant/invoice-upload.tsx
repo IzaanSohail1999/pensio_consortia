@@ -65,7 +65,7 @@ useEffect(() => {
   }
 
   try {
-    const res = await fetch('http://localhost:5000/api/invoices/create', {
+    const res = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/invoices/create`, {
       method: 'POST',
       body: form,
     });

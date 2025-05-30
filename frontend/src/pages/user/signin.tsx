@@ -16,7 +16,7 @@ const UserSignIn = () => {
     e.preventDefault();
 
     try {
-      const res = await fetch('http://localhost:5000/api/users/login', {
+      const res = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/users/login`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ username, password }),

@@ -39,7 +39,7 @@ const AdminDashboard = () => {
   useEffect(() => {
     const fetchUserCount = async () => {
       try {
-        const res = await fetch('http://localhost:5000/api/users/getAllUsers');
+        const res = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/users/getAllUsers`);
         const data = await res.json();
         if (res.ok && Array.isArray(data)) {
           setUserCount(data.length);
@@ -51,7 +51,7 @@ const AdminDashboard = () => {
 
     const fetchTotalTransactionCount = async () => {
       try {
-        const res = await fetch('http://localhost:5000/api/invoices/getAllInvoices');
+        const res = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/invoices/getAllInvoices`);
         const data = await res.json();
 
         if (res.ok && Array.isArray(data.data)) {
