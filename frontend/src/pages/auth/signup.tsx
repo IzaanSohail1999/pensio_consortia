@@ -6,7 +6,7 @@
 //   providers: any;
 // }
 
-// const AdminSignIn = ({ providers }: Props) => {
+const AdminSignIn = () => {
 //   return (
 //     <div className="min-h-screen flex flex-col items-center justify-center bg-gradient-to-r from-cyan-400 to-blue-600 text-white">
 //       <img src="/pensio-logo-white.png" alt="PENSIO Logo" className="w-40 mb-6 border-2 border-white p-2" />
@@ -59,7 +59,7 @@
 //       </div>
 //     </div>
 //   );
-// };
+};
 
 // export const getServerSideProps: GetServerSideProps = async () => {
 //   const providers = await getProviders();

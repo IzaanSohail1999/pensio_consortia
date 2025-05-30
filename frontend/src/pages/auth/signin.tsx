@@ -1,7 +1,7 @@
 // import { getProviders, signIn } from "next-auth/react";
 // import { FcGoogle } from "react-icons/fc";
 
-// export default function SignIn({ providers }: any) {
+export default function SignIn() {
 //   return (
 //     <div className="min-h-screen flex items-center justify-center bg-[#030b25] text-white">
 //       <div className="text-center">
@@ -66,7 +66,7 @@
 //       </div>
 //     </div>
 //   );
-// }
+}
 
 // export async function getServerSideProps() {
 //   const providers = await getProviders();
