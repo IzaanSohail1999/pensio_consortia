@@ -18,10 +18,7 @@ if (!fs.existsSync(uploadDir)) {
 connectDB();
 
 // Middleware
-app.use(cors({
-  origin: 'http://localhost:3000',
-  credentials: true
-}));
+app.use(cors());
 app.use(express.json());
 
 // Static folder for image access
