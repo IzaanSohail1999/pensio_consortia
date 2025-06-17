@@ -143,9 +143,9 @@ const InvoiceUpload = () => {
             <span className={styles.infoIconWrapper}>
               <span className={styles.infoIcon}>i</span>
               <span className={styles.tooltip}>
-                To find your Phantom wallet address, open your Phantom wallet (extension or app) and navigate to the "Deposit" or "Receive" section. You'll typically find your public address displayed, often with an option to copy it or generate a QR code.
+                To find your Phantom wallet address, open your Phantom wallet (extension or app) and navigate to the &quot;Deposit&quot; or &quot;Receive&quot; section. You&apos;ll typically find your public address displayed, often with an option to copy it or generate a QR code.
                 <br /><br />
-                Here's a more detailed breakdown:
+                Here&apos;s a more detailed breakdown:
                 <br /><br />
                 1. Accessing the Wallet:
                 <br /><br />
@@ -157,7 +157,7 @@ const InvoiceUpload = () => {
                 <br /><br />
                 Deposit/Receive:
                 <br />
-                Look for a button or section labeled "Deposit," "Receive," or "Get Address".
+                Look for a button or section labeled &quot;Deposit,&quot; &quot;Receive,&quot; or &quot;Get Address&quot;.
                 <br /><br />
                 Public Address:
                 <br />
