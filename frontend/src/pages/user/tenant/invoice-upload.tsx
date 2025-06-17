@@ -17,9 +17,9 @@ const InvoiceUpload = () => {
     landlordLastName: '',
     landlordCompany: '',
   });
-const [screenshot, setScreenshot] = useState<File | null>(null);
-const [previewUrl, setPreviewUrl] = useState<string | null>(null);
-const [selectedFileName, setSelectedFileName] = useState<string>('');
+  const [screenshot, setScreenshot] = useState<File | null>(null);
+  const [previewUrl, setPreviewUrl] = useState<string | null>(null);
+  const [selectedFileName, setSelectedFileName] = useState<string>('');
 
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -27,77 +27,77 @@ const [selectedFileName, setSelectedFileName] = useState<string>('');
     setFormData(prev => ({ ...prev, [name]: value }));
   };
 
-const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-  const file = e.target.files?.[0];
-  if (file) {
-    setScreenshot(file);
-    setSelectedFileName(file.name);
-    setPreviewUrl(URL.createObjectURL(file)); // 👈 this sets the preview
-  }
-};
-
-useEffect(() => {
-  return () => {
-    if (previewUrl) {
-      URL.revokeObjectURL(previewUrl);
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      setScreenshot(file);
+      setSelectedFileName(file.name);
+      setPreviewUrl(URL.createObjectURL(file));
     }
   };
-}, [previewUrl]);
+
+  useEffect(() => {
+    return () => {
+      if (previewUrl) {
+        URL.revokeObjectURL(previewUrl);
+      }
+    };
+  }, [previewUrl]);
 
   const handleSubmit = async (e: React.FormEvent) => {
-  e.preventDefault();
+    e.preventDefault();
 
-  const form = new FormData();
-  form.append('email', user?.email ?? '');
-  form.append('firstName', formData.firstName);
-  form.append('lastName', formData.lastName);
-  form.append('cellNumber', formData.cellNumber);
-  form.append('phantomWallet', formData.phantomWallet);
-  form.append('rentAddress', formData.rentAddress);
-  form.append('rentAmount', formData.rentAmount);
-  form.append('leaseTerm', formData.leaseTerm);
-  form.append('landlordFirstName', formData.landlordFirstName);
-  form.append('landlordLastName', formData.landlordLastName);
-  form.append('landlordCompany', formData.landlordCompany);
-  
-  if (screenshot) {
-    form.append('screenshot', screenshot);
-  }
+    const form = new FormData();
+    form.append('email', user?.email ?? '');
+    form.append('firstName', formData.firstName);
+    form.append('lastName', formData.lastName);
+    form.append('cellNumber', formData.cellNumber);
+    form.append('phantomWallet', formData.phantomWallet);
+    form.append('rentAddress', formData.rentAddress);
+    form.append('rentAmount', formData.rentAmount);
+    form.append('leaseTerm', formData.leaseTerm);
+    form.append('landlordFirstName', formData.landlordFirstName);
+    form.append('landlordLastName', formData.landlordLastName);
+    form.append('landlordCompany', formData.landlordCompany);
 
-  try {
-    const res = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/invoices/create`, {
-      method: 'POST',
-      body: form,
-    });
-
-    const data = await res.json();
-
-    if (res.ok) {
-      alert('Invoice submitted successfully!');
-      setFormData({
-        email: '',
-        firstName: '',
-        lastName: '',
-        cellNumber: '',
-        phantomWallet: '',
-        rentAddress: '',
-        rentAmount: '',
-        leaseTerm: '',
-        landlordFirstName: '',
-        landlordLastName: '',
-        landlordCompany: '',
-      });
-      setScreenshot(null);
-      setSelectedFileName('');
-      setPreviewUrl(null);
-    } else {
-      alert(data.message || 'Error submitting invoice.');
+    if (screenshot) {
+      form.append('screenshot', screenshot);
     }
-  } catch (error) {
-    console.error(error);
-    alert('Something went wrong while submitting.');
-  }
-};
+
+    try {
+      const res = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/invoices/create`, {
+        method: 'POST',
+        body: form,
+      });
+
+      const data = await res.json();
+
+      if (res.ok) {
+        alert('Invoice submitted successfully!');
+        setFormData({
+          email: '',
+          firstName: '',
+          lastName: '',
+          cellNumber: '',
+          phantomWallet: '',
+          rentAddress: '',
+          rentAmount: '',
+          leaseTerm: '',
+          landlordFirstName: '',
+          landlordLastName: '',
+          landlordCompany: '',
+        });
+        setScreenshot(null);
+        setSelectedFileName('');
+        setPreviewUrl(null);
+      } else {
+        alert(data.message || 'Error submitting invoice.');
+      }
+    } catch (error) {
+      console.error(error);
+      alert('Something went wrong while submitting.');
+    }
+  };
 
   return (
     <div className="min-h-screen w-full flex justify-center items-start overflow-y-auto py-10 bg-[#0c0f1e] mt-5">
@@ -138,7 +138,37 @@ useEffect(() => {
 
         {/* Wallet */}
         <div className={styles.formGroup}>
-          <label className={styles.label}>Phantom Wallet Address</label>
+          <label className={styles.label}>
+            Phantom Wallet Address
+            <span className={styles.infoIconWrapper}>
+              <span className={styles.infoIcon}>i</span>
+              <span className={styles.tooltip}>
+                To find your Phantom wallet address, open your Phantom wallet (extension or app) and navigate to the "Deposit" or "Receive" section. You'll typically find your public address displayed, often with an option to copy it or generate a QR code.
+                <br /><br />
+                Here's a more detailed breakdown:
+                <br /><br />
+                1. Accessing the Wallet:
+                <br /><br />
+                Desktop Extension: Open your Phantom wallet extension in your web browser.
+                <br /><br />
+                Mobile App: Open the Phantom app on your mobile device.
+                <br /><br />
+                2. Finding the Address:
+                <br /><br />
+                Deposit/Receive:
+                <br />
+                Look for a button or section labeled "Deposit," "Receive," or "Get Address".
+                <br /><br />
+                Public Address:
+                <br />
+                Your public address is a long string of characters that can be used to receive funds.
+                <br /><br />
+                Copy or QR Code:
+                <br />
+                You can often copy the address directly to your clipboard or generate a QR code to share.
+              </span>
+            </span>
+          </label>
           <input type="text" name="phantomWallet" placeholder="Wallet public key" value={formData.phantomWallet} onChange={handleChange} className={styles.input} required />
         </div>
 
@@ -176,8 +206,34 @@ useEffect(() => {
           </div>
 
           {previewUrl && (
-            <div className={styles.previewWrapper}>
+            <div className={styles.previewWrapper} style={{ position: 'relative', display: 'inline-block' }}>
               <img src={previewUrl} alt="Preview" className={styles.previewImage} />
+              <span
+                className={styles.deleteIcon}
+                onClick={() => {
+                  setPreviewUrl(null);
+                  setSelectedFileName('');
+                  setScreenshot(null);
+                }}
+                title="Remove"
+              >
+                <svg
+                  width="22"
+                  height="22"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  style={{ display: 'block', margin: 'auto' }}
+                >
+                  <polyline points="3 6 5 6 21 6" />
+                  <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2v2" />
+                  <line x1="10" y1="11" x2="10" y2="17" />
+                  <line x1="14" y1="11" x2="14" y2="17" />
+                </svg>
+              </span>
             </div>
           )}
         </div>
@@ -200,7 +256,7 @@ useEffect(() => {
         </div>
 
         <div style={{ textAlign: 'center' }}>
-          <button type="submit" className={styles.button}>Upload Invoice</button>
+          <button type="submit" className={styles.button}>Upload Proof of Rent Payment</button>
         </div>
       </form>
     </div>
