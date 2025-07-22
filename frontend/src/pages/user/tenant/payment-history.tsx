@@ -55,7 +55,7 @@ const PaymentHistory = () => {
               <th>Lease Term</th>
               <th>Landlord</th>
               {/* <th>Status</th> */}
-              <th>Invoice</th>
+              {/* <th>Invoice</th> */}
             </tr>
           </thead>
           <tbody>
@@ -70,15 +70,15 @@ const PaymentHistory = () => {
                   <td>{t.leaseTerm}</td>
                   <td>{t.landlordFirstName} {t.landlordLastName}</td>
                   {/* <td>Completed</td> */}
-                  <td>
-                    {t.screenshotUrl ? (
+                  {/* <td> */}
+                    {/* {t.screenshotUrl ? (
                       <a className={styles.link} href={t.screenshotUrl} target="_blank" rel="noopener noreferrer">
                         View
                       </a>
                     ) : (
                       'No File'
-                    )}
-                  </td>
+                    )} */}
+                  {/* </td> */}
                 </tr>
               ))
             ) : (

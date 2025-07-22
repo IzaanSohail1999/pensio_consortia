@@ -2,8 +2,8 @@ import type { NextApiRequest, NextApiResponse } from 'next';
 import dbConnect from '../_db/mongoConnect';
 import { Invoice } from '../_db/Invoice';
 import { IncomingForm, Fields, Files, File } from 'formidable';
-import fs from 'fs';
-import path from 'path';
+// import fs from 'fs';
+// import path from 'path';
 
 export const config = {
   api: {
@@ -11,17 +11,18 @@ export const config = {
   },
 };
 
-const uploadsDir = path.join(process.cwd(), 'public', 'uploads');
-if (!fs.existsSync(uploadsDir)) {
-  fs.mkdirSync(uploadsDir, { recursive: true });
-}
+// const uploadsDir = path.join(process.cwd(), 'public', 'uploads');
+// if (!fs.existsSync(uploadsDir)) {
+//   fs.mkdirSync(uploadsDir, { recursive: true });
+// }
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   if (req.method !== 'POST') {
     return res.status(405).json({ success: false, message: 'Method not allowed' });
   }
   await dbConnect();
-  const form = new IncomingForm({ uploadDir: uploadsDir, keepExtensions: true });
+  // const form = new IncomingForm({ uploadDir: uploadsDir, keepExtensions: true });
+  const form = new IncomingForm({ keepExtensions: true }); // uploadDir commented out
   form.parse(req, (err: Error | null, fields: Fields, files: Files) => {
     (async () => {
       if (err) {
@@ -35,12 +36,12 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         for (const key in fields) {
           invoiceData[key] = Array.isArray(fields[key]) ? fields[key][0] : fields[key];
         }
-        if (files.screenshot && Array.isArray(files.screenshot)) {
-          invoiceData.screenshotUrl = `/uploads/${path.basename(files.screenshot[0].filepath)}`;
-        } else if (files.screenshot) {
-          invoiceData.screenshotUrl = `/uploads/${path.basename((files.screenshot as File).filepath)}`;
-        }
-        // Convert rentAmount to number
+        // if (files.screenshot && Array.isArray(files.screenshot)) {
+        //   invoiceData.screenshotUrl = `/uploads/${path.basename(files.screenshot[0].filepath)}`;
+        // } else if (files.screenshot) {
+        //   invoiceData.screenshotUrl = `/uploads/${path.basename((files.screenshot as File).filepath)}`;
+        // }
+        // Do NOT process or save screenshot/image (code commented out)
         if (invoiceData.rentAmount) invoiceData.rentAmount = Number(invoiceData.rentAmount);
         const invoice = new Invoice(invoiceData);
         await invoice.save();

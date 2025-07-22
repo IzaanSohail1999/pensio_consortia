@@ -71,7 +71,7 @@ const TransactionsPage = () => {
               <th>Lease Term</th>
               <th>Landlord</th>
               {/* <th>Status</th> */}
-              <th>Invoice</th>
+              {/* <th>Invoice</th> */}
             </tr>
           </thead>
           <tbody className="text-gray-200">
@@ -85,15 +85,15 @@ const TransactionsPage = () => {
                   <td>${t.rentAmount}</td>
                   <td>{t.leaseTerm}</td>
                   <td>{t.landlordFirstName} {t.landlordLastName}</td>
-                  <td>
-                    {t.screenshotUrl ? (
+                  {/* <td> */}
+                    {/* {t.screenshotUrl ? (
                       <a className={styles.link} href={t.screenshotUrl} target="_blank" rel="noopener noreferrer">
                         View
                       </a>
                     ) : (
                       'No File'
-                    )}
-                  </td>
+                    )} */}
+                  {/* </td> */}
                 </tr>
               ))
             ) : (

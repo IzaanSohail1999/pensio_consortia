@@ -18,9 +18,9 @@ const InvoiceUpload = () => {
     landlordLastName: '',
     landlordCompany: '',
   });
-  const [screenshot, setScreenshot] = useState<File | null>(null);
-  const [previewUrl, setPreviewUrl] = useState<string | null>(null);
-  const [selectedFileName, setSelectedFileName] = useState<string>('');
+  // const [screenshot, setScreenshot] = useState<File | null>(null);
+  // const [previewUrl, setPreviewUrl] = useState<string | null>(null);
+  // const [selectedFileName, setSelectedFileName] = useState<string>('');
 
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -28,22 +28,22 @@ const InvoiceUpload = () => {
     setFormData(prev => ({ ...prev, [name]: value }));
   };
 
-  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (file) {
-      setScreenshot(file);
-      setSelectedFileName(file.name);
-      setPreviewUrl(URL.createObjectURL(file));
-    }
-  };
+  // const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  //   const file = e.target.files?.[0];
+  //   if (file) {
+  //     setScreenshot(file);
+  //     setSelectedFileName(file.name);
+  //     setPreviewUrl(URL.createObjectURL(file));
+  //   }
+  // };
 
-  useEffect(() => {
-    return () => {
-      if (previewUrl) {
-        URL.revokeObjectURL(previewUrl);
-      }
-    };
-  }, [previewUrl]);
+  // useEffect(() => {
+  //   return () => {
+  //     if (previewUrl) {
+  //       URL.revokeObjectURL(previewUrl);
+  //     }
+  //   };
+  // }, [previewUrl]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -61,9 +61,9 @@ const InvoiceUpload = () => {
     form.append('landlordLastName', formData.landlordLastName);
     form.append('landlordCompany', formData.landlordCompany);
 
-    if (screenshot) {
-      form.append('screenshot', screenshot);
-    }
+    // if (screenshot) {
+    //   form.append('screenshot', screenshot);
+    // }
 
     try {
       const res = await fetch('/api/invoices/create', {
@@ -88,9 +88,9 @@ const InvoiceUpload = () => {
           landlordLastName: '',
           landlordCompany: '',
         });
-        setScreenshot(null);
-        setSelectedFileName('');
-        setPreviewUrl(null);
+        // setScreenshot(null);
+        // setSelectedFileName('');
+        // setPreviewUrl(null);
       } else {
         alert(data.message || 'Error submitting invoice.');
       }
@@ -192,7 +192,7 @@ const InvoiceUpload = () => {
         </div>
 
         {/* Screenshot */}
-        <div className={styles.formGroup}>
+        {/*
           <label className={styles.label}>Screenshot of Rent Payment</label>
           <div className={styles.customFileWrapper}>
             <label className={styles.customFileLabel}>
@@ -236,7 +236,7 @@ const InvoiceUpload = () => {
               </span>
             </div>
           )}
-        </div>
+        */}
 
 
         {/* Landlord Info */}
