@@ -205,7 +205,6 @@ const InvoiceUpload = () => {
               />
             </label>
           </div>
-// test
           {previewUrl && (
             <div className={styles.previewWrapper} style={{ position: 'relative', display: 'inline-block' }}>
               <Image src={previewUrl} alt="Preview" className={styles.previewImage} width={200} height={200} />
