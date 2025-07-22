@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import styles from '@/styles/style.module.css';
 import { useUser } from '@/context/UserContext';
+import Image from 'next/image';
 
 const InvoiceUpload = () => {
   const { user } = useUser();
@@ -207,7 +208,7 @@ const InvoiceUpload = () => {
 
           {previewUrl && (
             <div className={styles.previewWrapper} style={{ position: 'relative', display: 'inline-block' }}>
-              <img src={previewUrl} alt="Preview" className={styles.previewImage} />
+              <Image src={previewUrl} alt="Preview" className={styles.previewImage} width={200} height={200} />
               <span
                 className={styles.deleteIcon}
                 onClick={() => {

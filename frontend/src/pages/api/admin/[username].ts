@@ -14,15 +14,15 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     return res.status(200).json(admin);
   } else if (req.method === 'PUT') {
     const { email, fullName, password } = req.body;
-    console.log("Details: ", email, fullName, password)
     const admin = await Admin.findOne({ username });
     if (!admin) return res.status(404).json({ message: 'Admin not found' });
     if (email) admin.email = email;
     if (fullName) admin.fullName = fullName;
     if (password) admin.password = password;
     await admin.save();
-    const { password: pw, ...adminData } = admin.toObject();
-    return res.status(200).json({ message: 'Admin updated successfully', admin: adminData });
+    const adminObj = admin.toObject();
+    delete ((adminObj as unknown) as Record<string, unknown>).password;
+    return res.status(200).json({ message: 'Admin updated successfully', admin: adminObj });
   } else if (req.method === 'DELETE') {
     const admin = await Admin.findOneAndDelete({ username });
     if (!admin) return res.status(404).json({ message: 'Admin not found' });

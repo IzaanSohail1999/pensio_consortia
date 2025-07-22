@@ -28,7 +28,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     return res.status(200).json({ success: true, data: invoice });
   } else if (req.method === 'PUT') {
     const form = new IncomingForm({ uploadDir: uploadsDir, keepExtensions: true });
-    form.parse(req, (err: any, fields: Fields, files: Files) => {
+    form.parse(req, (err: Error | null, fields: Fields, files: Files) => {
       (async () => {
         if (err) {
           res.status(500).json({ success: false, message: 'File upload error', error: err.message });
@@ -45,7 +45,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
             }
           }
           // Convert all fields to string (first value) if they are arrays
-          const updateData: any = {};
+          const updateData: Record<string, string | number | undefined> = {};
           for (const key in fields) {
             updateData[key] = Array.isArray(fields[key]) ? fields[key][0] : fields[key];
           }
@@ -57,8 +57,8 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
           if (updateData.rentAmount) updateData.rentAmount = Number(updateData.rentAmount);
           const updatedInvoice = await Invoice.findByIdAndUpdate(id, updateData, { new: true });
           res.status(200).json({ success: true, message: 'Invoice updated', data: updatedInvoice });
-        } catch (error: any) {
-          res.status(500).json({ success: false, message: 'Server error', error: error.message });
+        } catch (error) {
+          res.status(500).json({ success: false, message: 'Server error', error: (error as Error).message });
         }
       })();
     });

@@ -39,7 +39,7 @@ const AdminDashboard = () => {
   useEffect(() => {
     const fetchUserCount = async () => {
       try {
-        const res = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/users/getAllUsers`);
+        const res = await fetch('/api/users/getAllUsers');
         const data = await res.json();
         if (res.ok && Array.isArray(data)) {
           setUserCount(data.length);

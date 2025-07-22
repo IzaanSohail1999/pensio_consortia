@@ -16,7 +16,6 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     return res.status(400).json({ message: 'Admin not found' });
   }
   const isMatch = await admin.matchPassword(password);
-  console.log('admin found: ', isMatch)
   if (!isMatch) {
     return res.status(400).json({ message: 'Invalid password' });
   }

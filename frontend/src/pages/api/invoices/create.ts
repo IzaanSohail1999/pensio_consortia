@@ -22,7 +22,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
   }
   await dbConnect();
   const form = new IncomingForm({ uploadDir: uploadsDir, keepExtensions: true });
-  form.parse(req, (err: any, fields: Fields, files: Files) => {
+  form.parse(req, (err: Error | null, fields: Fields, files: Files) => {
     (async () => {
       if (err) {
         console.error('File upload error:', err);
@@ -30,10 +30,8 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         return;
       }
       try {
-        console.log('Received fields:', fields);
-        console.log('Received files:', files);
         // Convert all fields to string (first value) if they are arrays
-        const invoiceData: any = {};
+        const invoiceData: Record<string, string | number | undefined> = {};
         for (const key in fields) {
           invoiceData[key] = Array.isArray(fields[key]) ? fields[key][0] : fields[key];
         }
@@ -46,11 +44,10 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         if (invoiceData.rentAmount) invoiceData.rentAmount = Number(invoiceData.rentAmount);
         const invoice = new Invoice(invoiceData);
         await invoice.save();
-        console.log('Invoice saved:', invoice);
         res.status(201).json({ success: true, message: 'Invoice submitted successfully', data: invoice });
-      } catch (error: any) {
+      } catch (error) {
         console.error('Server error:', error);
-        res.status(500).json({ success: false, message: 'Server error', error: error.message });
+        res.status(500).json({ success: false, message: 'Server error', error: (error as Error).message });
       }
     })();
   });

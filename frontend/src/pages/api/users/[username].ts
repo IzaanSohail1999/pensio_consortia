@@ -22,8 +22,9 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     if (role) user.role = role;
     if (password) user.password = await bcrypt.hash(password, 10);
     await user.save();
-    const { password: pw, ...userData } = user.toObject();
-    return res.status(200).json({ message: 'User updated successfully', user: userData });
+    const userObj = user.toObject();
+    delete ((userObj as unknown) as Record<string, unknown>).password;
+    return res.status(200).json({ message: 'User updated successfully', user: userObj });
   } else if (req.method === 'DELETE') {
     const user = await User.findOneAndDelete({ username });
     if (!user) return res.status(404).json({ message: 'User not found' });
