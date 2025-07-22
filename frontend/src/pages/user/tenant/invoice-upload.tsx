@@ -1,7 +1,7 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import styles from '@/styles/style.module.css';
 import { useUser } from '@/context/UserContext';
-import Image from 'next/image';
+// import Image from 'next/image';
 
 const InvoiceUpload = () => {
   const { user } = useUser();

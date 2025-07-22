@@ -1,7 +1,7 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
 import dbConnect from '../_db/mongoConnect';
 import { Invoice } from '../_db/Invoice';
-import { IncomingForm, Fields, Files, File } from 'formidable';
+import { IncomingForm, Fields } from 'formidable';
 import fs from 'fs';
 import path from 'path';
 
@@ -29,7 +29,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
   } else if (req.method === 'PUT') {
     // const form = new IncomingForm({ uploadDir: uploadsDir, keepExtensions: true });
     const form = new IncomingForm({ keepExtensions: true }); // uploadDir commented out
-    form.parse(req, (err: Error | null, fields: Fields, files: Files) => {
+    form.parse(req, (err: Error | null, fields: Fields/*, files: Files*/) => {
       (async () => {
         if (err) {
           res.status(500).json({ success: false, message: 'File upload error', error: err.message });
