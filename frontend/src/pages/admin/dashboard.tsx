@@ -51,7 +51,7 @@ const AdminDashboard = () => {
 
     const fetchTotalTransactionCount = async () => {
       try {
-        const res = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/invoices/getAllInvoices`);
+        const res = await fetch('/api/invoices/getAllInvoices');
         const data = await res.json();
 
         if (res.ok && Array.isArray(data.data)) {

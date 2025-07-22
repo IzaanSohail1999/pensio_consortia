@@ -65,7 +65,7 @@ const InvoiceUpload = () => {
     }
 
     try {
-      const res = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/invoices/create`, {
+      const res = await fetch('/api/invoices/create', {
         method: 'POST',
         body: form,
       });
