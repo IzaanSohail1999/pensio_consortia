@@ -1,7 +1,36 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
+
+interface GeolocationCheckData {
+  success: boolean;
+  data?: {
+    countryCode?: string;
+    isBlocked?: boolean;
+    message?: string;
+  };
+  message?: string;
+}
+
+interface DebugData {
+  clientIP?: string;
+  headers?: Record<string, string>;
+  services?: Array<{
+    service: string;
+    success: boolean;
+    countryCode?: string;
+    error?: string;
+  }>;
+}
+
+interface TestResults {
+  timestamp: string;
+  geolocationCheck?: GeolocationCheckData;
+  debugInfo?: DebugData;
+  testCountry?: string;
+  result?: GeolocationCheckData;
+}
 
 const GeolocationTestPage = () => {
-  const [testResults, setTestResults] = useState<any>(null);
+  const [testResults, setTestResults] = useState<TestResults | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 

@@ -354,7 +354,7 @@ const GeolocationPage = () => {
              
              <div className="space-y-4">
                <p className="text-gray-300 text-sm">
-                 Test your geolocation settings to ensure they're working correctly.
+                 Test your geolocation settings to ensure they&apos;re working correctly.
                </p>
                
                <div className="flex flex-wrap gap-2">

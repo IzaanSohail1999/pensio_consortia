@@ -161,6 +161,21 @@ function getClientIP(req: NextApiRequest): string | null {
   return null;
 }
 
+// Define interfaces for geolocation data
+interface GeolocationData {
+  country_code?: string;
+  country?: string;
+  countryCode?: string;
+  country_code2?: string;
+  [key: string]: string | number | boolean | undefined; // For other properties we don't know about
+}
+
+interface GeolocationService {
+  name: string;
+  url: string;
+  extractor: (data: GeolocationData) => string | undefined;
+}
+
 // Helper function to get country from IP using multiple fallback services
 async function getCountryFromIPWithFallbacks(ip: string): Promise<string | null> {
   // Skip localhost and private IPs
@@ -170,14 +185,14 @@ async function getCountryFromIPWithFallbacks(ip: string): Promise<string | null>
   }
 
   // Try multiple geolocation services in sequence
-  const services = [
-    { name: 'ipapi.co', url: `https://ipapi.co/${ip}/json/`, extractor: (data: any) => data.country_code },
-    { name: 'ipinfo.io', url: `https://ipinfo.io/${ip}/json`, extractor: (data: any) => data.country },
-    { name: 'ip-api.com', url: `http://ip-api.com/json/${ip}`, extractor: (data: any) => data.countryCode },
-    { name: 'freegeoip.app', url: `https://freegeoip.app/json/${ip}`, extractor: (data: any) => data.country_code },
-    { name: 'ipgeolocation.io', url: `https://api.ipgeolocation.io/ipgeo?apiKey=free&ip=${ip}`, extractor: (data: any) => data.country_code2 },
-    { name: 'ipapi.is', url: `https://ipapi.is/json/${ip}`, extractor: (data: any) => data.country_code },
-    { name: 'ipwho.is', url: `https://ipwho.is/${ip}`, extractor: (data: any) => data.country_code }
+  const services: GeolocationService[] = [
+    { name: 'ipapi.co', url: `https://ipapi.co/${ip}/json/`, extractor: (data: GeolocationData) => data.country_code },
+    { name: 'ipinfo.io', url: `https://ipinfo.io/${ip}/json`, extractor: (data: GeolocationData) => data.country },
+    { name: 'ip-api.com', url: `http://ip-api.com/json/${ip}`, extractor: (data: GeolocationData) => data.countryCode },
+    { name: 'freegeoip.app', url: `https://freegeoip.app/json/${ip}`, extractor: (data: GeolocationData) => data.country_code },
+    { name: 'ipgeolocation.io', url: `https://api.ipgeolocation.io/ipgeo?apiKey=free&ip=${ip}`, extractor: (data: GeolocationData) => data.country_code2 },
+    { name: 'ipapi.is', url: `https://ipapi.is/json/${ip}`, extractor: (data: GeolocationData) => data.country_code },
+    { name: 'ipwho.is', url: `https://ipwho.is/${ip}`, extractor: (data: GeolocationData) => data.country_code }
   ];
 
   for (const service of services) {
@@ -201,7 +216,7 @@ async function getCountryFromIPWithFallbacks(ip: string): Promise<string | null>
         continue;
       }
       
-      const data = await response.json();
+      const data: GeolocationData = await response.json();
       const countryCode = service.extractor(data);
       
       if (countryCode && typeof countryCode === 'string' && countryCode.length === 2) {
