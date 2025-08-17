@@ -26,18 +26,7 @@ const GeolocationPage = () => {
     return 'admin';
   };
 
-  const refreshSettings = async () => {
-    try {
-      const response = await fetch('/api/admin/geolocation');
-      const data = await response.json();
-      
-      if (data.success && data.data) {
-        setSettings(data.data);
-      }
-    } catch (error) {
-      console.error('Error refreshing settings:', error);
-    }
-  };
+
 
   useEffect(() => {
     // Fetch real geolocation settings from API
