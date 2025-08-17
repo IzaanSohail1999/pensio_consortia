@@ -8,6 +8,7 @@ const mainNavItems = [
   { icon: '🏠', label: 'Dashboard', path: '/admin/dashboard' },
   { icon: '👤', label: 'User Management', path: '/admin/users' },
   { icon: '💳', label: 'Transaction Monitoring', path: '/admin/transactions' },
+  { icon: '🌍', label: 'Geolocation Settings', path: '/admin/geolocation' },
 ];
 
 const footerNavItems = [

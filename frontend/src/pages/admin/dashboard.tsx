@@ -8,6 +8,7 @@ const AdminDashboard = () => {
   const { admin } = useAdmin();
   const [userCount, setUserCount] = useState<number>(0);
   const [transactionCount, setTransactionCount] = useState<number>(0);
+  const [geolocationStatus, setGeolocationStatus] = useState<string>('Loading...');
 
   const cards = [
     {
@@ -31,10 +32,16 @@ const AdminDashboard = () => {
       labelText: "Transactions",
       statValue: transactionCount,
       onClick: () => router.push('/admin/transactions')
+    },
+    {
+      title: "Geolocation Settings",
+      description: "Manage location-based access restrictions",
+      buttonText: "Configure",
+      labelText: "Status",
+      statValue: geolocationStatus,
+      onClick: () => router.push('/admin/geolocation')
     }
   ]
-
-
 
   useEffect(() => {
     const fetchUserCount = async () => {
@@ -58,12 +65,29 @@ const AdminDashboard = () => {
           setTransactionCount(data.data.length);
         }
       } catch (error) {
-        console.error('Failed to fetch user count:', error);
+        console.error('Failed to fetch transaction count:', error);
+      }
+    };
+
+    const fetchGeolocationStatus = async () => {
+      try {
+        const res = await fetch('/api/admin/geolocation');
+        const data = await res.json();
+        
+        if (res.ok && data.success && data.data) {
+          setGeolocationStatus(data.data.isEnabled ? 'Active' : 'Disabled');
+        } else {
+          setGeolocationStatus('Error');
+        }
+      } catch (error) {
+        console.error('Failed to fetch geolocation status:', error);
+        setGeolocationStatus('Error');
       }
     };
 
     fetchUserCount();
     fetchTotalTransactionCount();
+    fetchGeolocationStatus();
   }, []);
 
   return (

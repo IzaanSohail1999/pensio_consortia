@@ -3,10 +3,12 @@ import { useRouter } from 'next/router';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useUser } from '@/context/UserContext';
+import { useGeolocation } from '@/hooks/useGeolocation';
 
 const UserSignIn = () => {
   const router = useRouter();
   const { setUser } = useUser();
+  const { isLoading, isBlocked, error: geolocationError } = useGeolocation();
 
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
@@ -49,12 +51,30 @@ const UserSignIn = () => {
     }
   };
 
+  // Show loading while checking geolocation
+  if (isLoading) {
+    return (
+      <div className="min-h-screen w-full overflow-y-auto flex flex-col items-center justify-center bg-gradient-to-r from-cyan-400 to-blue-600 text-white p-4">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-16 w-16 border-b-2 border-white mx-auto mb-4"></div>
+          <p className="text-xl">Checking access...</p>
+        </div>
+      </div>
+    );
+  }
+
+  // If blocked, the hook will redirect to restricted-access page
+  if (isBlocked) {
+    return null;
+  }
+
   return (
     <div className="min-h-screen w-full overflow-y-auto flex flex-col items-center justify-center bg-gradient-to-r from-cyan-400 to-blue-600 text-white p-4">
       <Image src="/assets/logo.png" alt="PENSIO Logo" width={200} height={200} />
       <div className="bg-[#030b25] p-10 rounded-md shadow-lg w-full max-w-md border border-gray-500">
         <h2 className="text-3xl font-bold text-center mb-8">USER PORTAL</h2>
 
+        {geolocationError && <p className="text-red-400 text-center mb-4">⚠️ {geolocationError}</p>}
         {errorMsg && <p className="text-red-400 text-center">{errorMsg}</p>}
 
         <form onSubmit={handleLogin}>
