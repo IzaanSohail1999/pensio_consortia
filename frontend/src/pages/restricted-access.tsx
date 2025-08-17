@@ -99,12 +99,12 @@ const RestrictedAccessPage = () => {
             🔄 Try Again
           </button>
           
-          <button
+          {/* <button
             onClick={() => router.push('/')}
             className="w-full bg-transparent border-2 border-white text-white px-6 py-3 rounded-lg font-semibold hover:bg-white hover:text-red-800 transition-colors"
           >
             🏠 Go to Homepage
-          </button>
+          </button> */}
         </div>
 
         {/* Footer */}
