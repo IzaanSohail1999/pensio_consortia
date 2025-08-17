@@ -183,7 +183,7 @@ const GeolocationPage = () => {
 
   return (
     <div className={styles.page}>
-        <div className="mb-8 flex justify-between items-start">
+        {/* <div className="mb-8 flex justify-between items-start">
           <div>
             <h1 className={styles.pageTitle}>Geolocation Settings</h1>
             <p className={styles.pageSubtitle}>Manage location-based access restrictions for your platform</p>
@@ -205,7 +205,7 @@ const GeolocationPage = () => {
                🧪 Test Geolocation
              </a>
            </div>
-        </div>
+        </div> */}
 
         {error && (
           <div className="mb-6 p-4 bg-red-50 border border-red-200 rounded-md">
