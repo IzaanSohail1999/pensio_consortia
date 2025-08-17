@@ -338,7 +338,7 @@ const GeolocationPage = () => {
            </div>
 
            {/* Test Card */}
-           <div className="bg-[#1e2a46] rounded-lg p-6">
+           {/* <div className="bg-[#1e2a46] rounded-lg p-6">
              <h2 className="text-xl font-semibold text-white mb-4">🧪 Test Geolocation</h2>
              
              <div className="space-y-4">
@@ -388,7 +388,7 @@ const GeolocationPage = () => {
                    </p>
               </div>
             </div>
-          </div>
+          </div> */}
         </div>
       </div>
     );
