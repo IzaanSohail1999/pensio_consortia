@@ -188,13 +188,23 @@ const GeolocationPage = () => {
             <h1 className={styles.pageTitle}>Geolocation Settings</h1>
             <p className={styles.pageSubtitle}>Manage location-based access restrictions for your platform</p>
           </div>
-          <button
-            onClick={refreshSettings}
-            className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors"
-            title="Refresh settings"
-          >
-            🔄 Refresh
-          </button>
+                     <div className="flex gap-2">
+             <button
+               onClick={refreshSettings}
+               className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors"
+               title="Refresh settings"
+             >
+               🔄 Refresh
+             </button>
+             <a
+               href="/geolocation-test"
+               target="_blank"
+               className="px-4 py-2 bg-green-600 text-white rounded-md hover:bg-green-700 transition-colors"
+               title="Test geolocation"
+             >
+               🧪 Test Geolocation
+             </a>
+           </div>
         </div>
 
         {error && (
@@ -316,7 +326,7 @@ const GeolocationPage = () => {
                 <div className="text-lg font-semibold text-white">
                   {settings?.isEnabled ? 'Active' : 'Inactive'}
                 </div>
-              </div>
+             </div>
               
               <div className="text-center p-4 bg-[#2c344f] rounded-lg">
                 <div className="text-2xl font-bold text-white">
@@ -334,6 +344,59 @@ const GeolocationPage = () => {
                 <div className="text-lg font-semibold text-white">
                   {settings?.lastModified ? new Date(settings.lastModified).toLocaleDateString() : 'Never'}
                 </div>
+               </div>
+             </div>
+           </div>
+
+           {/* Test Card */}
+           <div className="bg-[#1e2a46] rounded-lg p-6">
+             <h2 className="text-xl font-semibold text-white mb-4">🧪 Test Geolocation</h2>
+             
+             <div className="space-y-4">
+               <p className="text-gray-300 text-sm">
+                 Test your geolocation settings to ensure they're working correctly.
+               </p>
+               
+               <div className="flex flex-wrap gap-2">
+                 <button
+                   onClick={() => window.open('/geolocation-test', '_blank')}
+                   className="px-4 py-2 bg-green-600 text-white rounded-md hover:bg-green-700 transition-colors"
+                 >
+                   🧪 Open Test Page
+                 </button>
+                 
+                 <button
+                   onClick={() => window.open('/api/geolocation/check', '_blank')}
+                   className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors"
+                 >
+                   🔍 Check Current Location
+                 </button>
+                 
+                 <button
+                   onClick={() => window.open('/api/geolocation/debug', '_blank')}
+                   className="px-4 py-2 bg-purple-600 text-white rounded-md hover:bg-purple-700 transition-colors"
+                 >
+                   🐛 Debug Info
+                 </button>
+                 
+                 <button
+                   onClick={() => window.open('/api/geolocation/check?test_country=PK', '_blank')}
+                   className="px-4 py-2 bg-red-600 text-white rounded-md hover:bg-red-700 transition-colors"
+                 >
+                   🧪 Test PK Blocking
+                 </button>
+               </div>
+               
+                                <div className="text-xs text-gray-400">
+                   <p>• <strong>Test Page:</strong> Interactive testing interface</p>
+                   <p>• <strong>Check Location:</strong> Raw API response</p>
+                   <p>• <strong>Debug Info:</strong> Detailed IP and header information</p>
+                 </div>
+                 
+                 <div className="mt-4 p-3 bg-yellow-900 bg-opacity-30 rounded-lg border border-yellow-600">
+                   <p className="text-yellow-200 text-xs">
+                     <strong>💡 Quick Test:</strong> Add <code className="bg-yellow-800 px-1 rounded">?test_country=PK</code> to any URL to simulate access from Pakistan
+                   </p>
               </div>
             </div>
           </div>
