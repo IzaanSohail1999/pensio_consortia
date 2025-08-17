@@ -146,7 +146,7 @@ const GeolocationTestPage = () => {
             <li>• <strong>Run Full Test:</strong> Tests both geolocation check and debug endpoints</li>
             <li>• <strong>Test Pakistan Blocking:</strong> Simulates access from Pakistan (should be blocked)</li>
             <li>• <strong>Test US Access:</strong> Simulates access from US (should be allowed)</li>
-            <li>• Check the console logs for detailed debugging information</li>
+            <li>• Check the test results below for detailed information</li>
           </ul>
         </div>
       </div>

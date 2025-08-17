@@ -1,6 +1,7 @@
 import { NextApiRequest, NextApiResponse } from 'next';
 import dbConnect from '../_db/mongoConnect';
 import AdminSettingsManager from '../_db/adminSettings';
+import { logger } from '@/utils/logger';
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   // Connect to database
@@ -29,7 +30,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
           data: settings
         });
       } catch (error) {
-        console.error('[GEOLOCATION API] Error getting settings:', error);
+        logger.error('Error getting geolocation settings', 'ADMIN_GEOLOCATION', { error: 'Failed to get settings' }, error instanceof Error ? error : new Error(String(error)));
         return res.status(500).json({
           success: false,
           message: 'Failed to get geolocation settings'
@@ -69,7 +70,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
           });
         }
       } catch (error) {
-        console.error('[GEOLOCATION API] Error updating settings:', error);
+        logger.error('Error updating geolocation settings', 'ADMIN_GEOLOCATION', { error: 'Failed to update settings' }, error instanceof Error ? error : new Error(String(error)));
         return res.status(500).json({
           success: false,
           message: 'Failed to update geolocation settings'
@@ -140,7 +141,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
           });
         }
       } catch (error) {
-        console.error('[GEOLOCATION API] Error with action:', error);
+        logger.error('Error with geolocation action', 'ADMIN_GEOLOCATION', { error: 'Failed to complete action' }, error instanceof Error ? error : new Error(String(error)));
         return res.status(500).json({
           success: false,
           message: 'Failed to complete action'

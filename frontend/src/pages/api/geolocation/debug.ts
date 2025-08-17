@@ -1,4 +1,5 @@
 import { NextApiRequest, NextApiResponse } from 'next';
+import { logger } from '@/utils/logger';
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   if (req.method !== 'GET') {
@@ -59,7 +60,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     });
 
   } catch (error) {
-    console.error('[GEOLOCATION DEBUG] Error:', error);
+    logger.error('Error in geolocation debug endpoint', 'GEOLOCATION_DEBUG', { error: 'Debug endpoint error' }, error instanceof Error ? error : new Error(String(error)));
     return res.status(500).json({
       error: 'Internal server error',
       message: error instanceof Error ? error.message : 'Unknown error'

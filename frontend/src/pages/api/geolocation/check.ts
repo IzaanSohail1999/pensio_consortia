@@ -1,6 +1,7 @@
 import { NextApiRequest, NextApiResponse } from 'next';
 import dbConnect from '../_db/mongoConnect';
 import AdminSettingsManager from '../_db/adminSettings';
+import { logger } from '@/utils/logger';
 
 export interface GeolocationCheckResult {
   isBlocked: boolean;
@@ -51,11 +52,11 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
     // Get user's IP address
     const clientIP = getClientIP(req);
-    console.log(`[GEOLOCATION] Client IP detected: ${clientIP}`);
+    logger.info(`Client IP detected: ${clientIP}`, 'GEOLOCATION');
     
     if (!clientIP) {
       // If we can't get IP, allow access (fail open)
-      console.log('[GEOLOCATION] Could not determine client IP - allowing access');
+      logger.warn('Could not determine client IP - allowing access', 'GEOLOCATION');
       return res.status(200).json({
         isBlocked: false,
         isEnabled: true,
@@ -67,16 +68,16 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
     // Get country from IP address using multiple fallback services
     const userCountry = await getCountryFromIPWithFallbacks(clientIP);
-    console.log(`[GEOLOCATION] Country detected: ${userCountry || 'UNKNOWN'}`);
+    logger.info(`Country detected: ${userCountry || 'UNKNOWN'}`, 'GEOLOCATION');
     
     // For testing purposes, you can force a specific country by adding ?test_country=PK to the URL
     const testCountry = req.query.test_country as string;
     const finalUserCountry = testCountry || userCountry;
-    console.log(`[GEOLOCATION] Final country (with test override): ${finalUserCountry || 'UNKNOWN'}`);
+    logger.info(`Final country (with test override): ${finalUserCountry || 'UNKNOWN'}`, 'GEOLOCATION');
     
     if (!finalUserCountry) {
       // If we can't determine country, allow access (fail open)
-      console.log('[GEOLOCATION] Could not determine country - allowing access');
+      logger.warn('Could not determine country - allowing access', 'GEOLOCATION');
       return res.status(200).json({
         isBlocked: false,
         isEnabled: true,
@@ -88,7 +89,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
     // Check if user's country is in restricted list
     const isBlocked = settings.restrictedCountries.includes(finalUserCountry);
-    console.log(`[GEOLOCATION] Access decision: ${isBlocked ? 'BLOCKED' : 'ALLOWED'} for country ${finalUserCountry}`);
+    logger.info(`Access decision: ${isBlocked ? 'BLOCKED' : 'ALLOWED'} for country ${finalUserCountry}`, 'GEOLOCATION');
     
     const response: GeolocationCheckResult = {
       isBlocked,
@@ -114,7 +115,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     return res.status(200).json(response);
 
   } catch (error) {
-    console.error('[GEOLOCATION CHECK] Error:', error);
+    logger.error('Error checking geolocation', 'GEOLOCATION', { error: 'Geolocation check failed' }, error instanceof Error ? error : new Error(String(error)));
     // Fail open - allow access if there's an error
     return res.status(200).json({
       isBlocked: false,
@@ -144,7 +145,7 @@ function getClientIP(req: NextApiRequest): string | null {
       // Handle comma-separated lists (take first IP)
       const ip = value.split(',')[0].trim();
       if (ip && !isPrivateIP(ip)) {
-        console.log(`Found IP from header ${header}: ${ip}`);
+        logger.debug(`Found IP from header ${header}: ${ip}`, 'GEOLOCATION');
         return ip;
       }
     }
@@ -153,11 +154,11 @@ function getClientIP(req: NextApiRequest): string | null {
   // Fallback to socket address
   const socketIP = req.socket.remoteAddress;
   if (socketIP && !isPrivateIP(socketIP)) {
-    console.log(`Found IP from socket: ${socketIP}`);
+    logger.debug(`Found IP from socket: ${socketIP}`, 'GEOLOCATION');
     return socketIP;
   }
   
-  console.log('Could not determine client IP from any source');
+  logger.debug('Could not determine client IP from any source', 'GEOLOCATION');
   return null;
 }
 
@@ -180,7 +181,7 @@ interface GeolocationService {
 async function getCountryFromIPWithFallbacks(ip: string): Promise<string | null> {
   // Skip localhost and private IPs
   if (isPrivateIP(ip)) {
-    console.log(`Skipping private IP: ${ip}`);
+    logger.debug(`Skipping private IP: ${ip}`, 'GEOLOCATION');
     return null;
   }
 
@@ -188,7 +189,7 @@ async function getCountryFromIPWithFallbacks(ip: string): Promise<string | null>
   const services: GeolocationService[] = [
     { name: 'ipapi.co', url: `https://ipapi.co/${ip}/json/`, extractor: (data: GeolocationData) => data.country_code },
     { name: 'ipinfo.io', url: `https://ipinfo.io/${ip}/json`, extractor: (data: GeolocationData) => data.country },
-    { name: 'ip-api.com', url: `http://ip-api.com/json/${ip}`, extractor: (data: GeolocationData) => data.countryCode },
+    { name: 'ip-api.com', url: `https://ip-api.com/json/${ip}`, extractor: (data: GeolocationData) => data.countryCode },
     { name: 'freegeoip.app', url: `https://freegeoip.app/json/${ip}`, extractor: (data: GeolocationData) => data.country_code },
     { name: 'ipgeolocation.io', url: `https://api.ipgeolocation.io/ipgeo?apiKey=free&ip=${ip}`, extractor: (data: GeolocationData) => data.country_code2 },
     { name: 'ipapi.is', url: `https://ipapi.is/json/${ip}`, extractor: (data: GeolocationData) => data.country_code },
@@ -197,7 +198,7 @@ async function getCountryFromIPWithFallbacks(ip: string): Promise<string | null>
 
   for (const service of services) {
     try {
-      console.log(`Trying ${service.name} for IP: ${ip}`);
+      logger.debug(`Trying ${service.name} for IP: ${ip}`, 'GEOLOCATION');
       
       const controller = new AbortController();
       const timeoutId = setTimeout(() => controller.abort(), 5000); // 5 second timeout
@@ -212,7 +213,7 @@ async function getCountryFromIPWithFallbacks(ip: string): Promise<string | null>
       clearTimeout(timeoutId);
       
       if (!response.ok) {
-        console.log(`${service.name} returned status: ${response.status}`);
+        logger.debug(`${service.name} returned status: ${response.status}`, 'GEOLOCATION');
         continue;
       }
       
@@ -220,19 +221,19 @@ async function getCountryFromIPWithFallbacks(ip: string): Promise<string | null>
       const countryCode = service.extractor(data);
       
       if (countryCode && typeof countryCode === 'string' && countryCode.length === 2) {
-        console.log(`Successfully got country ${countryCode} from ${service.name}`);
+        logger.info(`Successfully got country ${countryCode} from ${service.name}`, 'GEOLOCATION');
         return countryCode.toUpperCase();
       }
       
-      console.log(`${service.name} returned invalid data:`, data);
+      logger.debug(`${service.name} returned invalid data`, 'GEOLOCATION', data);
       
-         } catch (error) {
-       console.log(`Error with ${service.name}:`, error instanceof Error ? error.message : 'Unknown error');
-       continue;
-     }
+    } catch (error) {
+      logger.debug(`Error with ${service.name}: ${error instanceof Error ? error.message : 'Unknown error'}`, 'GEOLOCATION');
+      continue;
+    }
   }
   
-  console.log(`All geolocation services failed for IP: ${ip}`);
+  logger.warn(`All geolocation services failed for IP: ${ip}`, 'GEOLOCATION');
   return null;
 }
 
