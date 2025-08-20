@@ -1,9 +1,9 @@
 import { NextApiRequest, NextApiResponse } from 'next';
-import dbConnect from '../_db/mongoConnect';
-import { User } from '../_db/User';
+import dbConnect from '../../_db/mongoConnect';
+import { User } from '../../_db/User';
 import { withAuth } from '@/middleware/auth';
 
-interface GetUserByUsernameRequest extends NextApiRequest {
+interface GetUserByEmailRequest extends NextApiRequest {
   user?: {
     id: string;
     username: string;
@@ -11,7 +11,7 @@ interface GetUserByUsernameRequest extends NextApiRequest {
   };
 }
 
-async function getUserByUsernameHandler(req: GetUserByUsernameRequest, res: NextApiResponse) {
+async function getUserByEmailHandler(req: GetUserByEmailRequest, res: NextApiResponse) {
   if (req.method !== 'GET') {
     res.setHeader('Allow', ['GET']);
     return res.status(405).json({ message: `Method ${req.method} Not Allowed` });
@@ -26,20 +26,19 @@ async function getUserByUsernameHandler(req: GetUserByUsernameRequest, res: Next
       });
     }
 
-    const { username } = req.query;
+    const { email } = req.query;
 
-    if (!username || typeof username !== 'string') {
+    if (!email || typeof email !== 'string') {
       return res.status(400).json({
         success: false,
-        message: 'Username is required'
+        message: 'Email is required'
       });
     }
 
     await dbConnect();
-
-    // Find user by username
+    // Find user by email
     const user = await User.findOne({ 
-      username: username 
+      email: email.toLowerCase() 
     }).select('_id email fullName username role createdAt');
 
     if (!user) {
@@ -48,14 +47,13 @@ async function getUserByUsernameHandler(req: GetUserByUsernameRequest, res: Next
         message: 'User not found'
       });
     }
-
     return res.status(200).json({
       success: true,
       data: user
     });
 
   } catch (error) {
-    console.error('Error fetching user by username:', error);
+    console.error('Error fetching user by email:', error);
     return res.status(500).json({
       success: false,
       message: 'Failed to fetch user'
@@ -63,4 +61,4 @@ async function getUserByUsernameHandler(req: GetUserByUsernameRequest, res: Next
   }
 }
 
-export default withAuth(getUserByUsernameHandler); 
+export default withAuth(getUserByEmailHandler);

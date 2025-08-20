@@ -46,15 +46,28 @@ const UserLayout = ({
         {/* Navigation */}
         <nav className="flex-grow overflow-auto px-2">
           {currentNavItems.map((item) => (
-            <Link href={item.path} key={item.label}>
-              <div
-                className={`flex items-center gap-3 px-3 py-3 rounded-md cursor-pointer transition ${router.pathname === item.path ? 'bg-[#2c324d]' : 'hover:bg-[#2c324d]'
-                  }`}
-              >
-                <span className="text-lg">{item.icon}</span>
-                <span>{item.label}</span>
-              </div>
-            </Link>
+            <div key={item.label}>
+              {item.disabled ? (
+                // Disabled navigation item
+                <div
+                  className={`flex items-center gap-3 px-3 py-3 rounded-md cursor-not-allowed opacity-50 text-gray-500`}
+                >
+                  <span className="text-lg">{item.icon}</span>
+                  <span>{item.label}</span>
+                </div>
+              ) : (
+                // Active navigation item
+                <Link href={item.path}>
+                  <div
+                    className={`flex items-center gap-3 px-3 py-3 rounded-md cursor-pointer transition ${router.pathname === item.path ? 'bg-[#2c324d]' : 'hover:bg-[#2c324d]'
+                      }`}
+                  >
+                    <span className="text-lg">{item.icon}</span>
+                    <span>{item.label}</span>
+                  </div>
+                </Link>
+              )}
+            </div>
           ))}
 
           <hr className={styles.divider} />

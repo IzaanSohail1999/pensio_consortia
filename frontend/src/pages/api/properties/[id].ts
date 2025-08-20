@@ -1,9 +1,9 @@
 import { NextApiRequest, NextApiResponse } from 'next';
 import dbConnect from '../_db/mongoConnect';
-import { User } from '../_db/User';
+import { Property } from '../_db/Property';
 import { withAuth } from '@/middleware/auth';
 
-interface GetUserByUsernameRequest extends NextApiRequest {
+interface GetPropertyByIdRequest extends NextApiRequest {
   user?: {
     id: string;
     username: string;
@@ -11,7 +11,7 @@ interface GetUserByUsernameRequest extends NextApiRequest {
   };
 }
 
-async function getUserByUsernameHandler(req: GetUserByUsernameRequest, res: NextApiResponse) {
+async function getPropertyByIdHandler(req: GetPropertyByIdRequest, res: NextApiResponse) {
   if (req.method !== 'GET') {
     res.setHeader('Allow', ['GET']);
     return res.status(405).json({ message: `Method ${req.method} Not Allowed` });
@@ -26,41 +26,39 @@ async function getUserByUsernameHandler(req: GetUserByUsernameRequest, res: Next
       });
     }
 
-    const { username } = req.query;
+    const { id } = req.query;
 
-    if (!username || typeof username !== 'string') {
+    if (!id || typeof id !== 'string') {
       return res.status(400).json({
         success: false,
-        message: 'Username is required'
+        message: 'Property ID is required'
       });
     }
 
     await dbConnect();
-
-    // Find user by username
-    const user = await User.findOne({ 
-      username: username 
-    }).select('_id email fullName username role createdAt');
-
-    if (!user) {
+    
+    // Find property by ID
+    const property = await Property.findById(id).select('_id name address city state zipCode propertyType monthlyRent status bedrooms bathrooms squareFootage securityDeposit country');
+    
+    if (!property) {
       return res.status(404).json({
         success: false,
-        message: 'User not found'
+        message: 'Property not found'
       });
     }
 
     return res.status(200).json({
       success: true,
-      data: user
+      data: property
     });
 
   } catch (error) {
-    console.error('Error fetching user by username:', error);
+    console.error('Error fetching property by ID:', error);
     return res.status(500).json({
       success: false,
-      message: 'Failed to fetch user'
+      message: 'Failed to fetch property details'
     });
   }
 }
 
-export default withAuth(getUserByUsernameHandler); 
+export default withAuth(getPropertyByIdHandler);

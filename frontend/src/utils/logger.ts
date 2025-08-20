@@ -73,22 +73,17 @@ class Logger {
 
     // In production, you might want to send logs to a service like Sentry, LogRocket, etc.
     if (this.isProduction && level === LogLevel.ERROR) {
-      this.sendToExternalService(entry);
+      this.sendToExternalService();
     }
   }
 
-  private sendToExternalService(entry: LogEntry) {
+  private sendToExternalService() {
     // TODO: Implement external logging service integration
     // Examples: Sentry, LogRocket, DataDog, etc.
     
     // For now, we'll just log that we would send to external service
     if (process.env.NODE_ENV === 'development') {
-      console.log(`[EXTERNAL LOG] Would send to external service:`, {
-        level: entry.level,
-        message: entry.message,
-        context: entry.context,
-        timestamp: entry.timestamp
-      });
+      // Development mode - no external logging needed
     }
   }
 

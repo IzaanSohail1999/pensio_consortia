@@ -44,7 +44,11 @@ async function loginHandler(req: NextApiRequest, res: NextApiResponse) {
       return res.status(400).json({ message: 'Invalid credentials' });
     }
     
-    const token = jwt.sign({ id: user._id }, JWT_SECRET as string, { expiresIn: '7d' });
+    const token = jwt.sign({ 
+      id: user._id, 
+      username: user.username, 
+      role: user.role 
+    }, JWT_SECRET as string, { expiresIn: '7d' });
     
     return res.json({
       token,

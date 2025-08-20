@@ -122,7 +122,6 @@ export class AdminSettingsManager {
         });
 
         await defaultSettings.save();
-        console.log('[ADMIN SETTINGS] Default settings initialized');
         return true;
       }
 

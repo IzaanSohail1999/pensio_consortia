@@ -9,17 +9,23 @@ const TenantDashboard = () => {
 
   const cards = [
     {
-      title: 'Payment Invoice Upload',
-      desc: 'Upload your payment invoice for verification',
-      button: 'Upload Now',
-      onClick: () => router.push('/user/tenant/invoice-upload'),
+      title: 'View Rented Property',
+      desc: 'View details of the property you are currently renting',
+      button: 'View Property',
+      onClick: () => router.push('/user/tenant/rented-property'),
     },
-    {
-      title: 'Payment History',
-      desc: 'View your payment history and NFTs',
-      button: 'View History',
-      onClick: () => router.push('/user/tenant/payment-history'),
-    },
+    // {
+    //   title: 'Payment Invoice Upload',
+    //   desc: 'Upload your payment invoice for verification',
+    //   button: 'Upload Now',
+    //   onClick: () => router.push('/user/tenant/invoice-upload'),
+    // },
+    // {
+    //   title: 'Payment History',
+    //   desc: 'View your payment history and NFTs',
+    //   button: 'View History',
+    //   onClick: () => router.push('/user/tenant/payment-history'),
+    // },
     // {
     //   title: 'Wallet Management',
     //   desc: 'View your wallet balance and transaction history',
@@ -31,7 +37,7 @@ const TenantDashboard = () => {
   return (
     <div className={styles.page}>
       <div className={styles.pageHeader}>
-        <h1 className={styles.pageTitle}>{user ? `Hello, ${user.fullname}` : 'Hello, Tenant'}</h1>
+        <h1 className={styles.pageTitle}>{user ? `Hello, ${user.fullName}` : 'Hello, Tenant'}</h1>
         {/* <div className={styles.searchBar}>
           <span className={styles.searchIcon}>☰</span>
           <input type="text" placeholder="Search" />

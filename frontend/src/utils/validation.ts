@@ -161,6 +161,147 @@ export const commonValidations = {
     minLength: 2,
     maxLength: 100,
     pattern: /^[a-zA-Z\s'-]+$/
+  },
+
+  // Property validation rules
+  name: {
+    field: 'name',
+    required: true,
+    type: 'string' as const,
+    minLength: 2,
+    maxLength: 100
+  },
+
+  address: {
+    field: 'address',
+    required: true,
+    type: 'string' as const,
+    minLength: 5,
+    maxLength: 200
+  },
+
+  city: {
+    field: 'city',
+    required: true,
+    type: 'string' as const,
+    minLength: 2,
+    maxLength: 100
+  },
+
+  state: {
+    field: 'state',
+    required: true,
+    type: 'string' as const,
+    minLength: 2,
+    maxLength: 50
+  },
+
+  zipCode: {
+    field: 'zipCode',
+    required: true,
+    type: 'string' as const,
+    pattern: /^\d{5}(-\d{4})?$/
+  },
+
+  country: {
+    field: 'country',
+    required: true,
+    type: 'string' as const,
+    minLength: 2,
+    maxLength: 50
+  },
+
+  propertyType: {
+    field: 'propertyType',
+    required: true,
+    type: 'string' as const,
+    custom: (value: unknown) => {
+      if (typeof value !== 'string') return 'Property type must be a string';
+      const validTypes = ['apartment', 'house', 'condo', 'townhouse', 'commercial', 'studio'];
+      if (!validTypes.includes(value)) {
+        return 'Property type must be one of: apartment, house, condo, townhouse, commercial, studio';
+      }
+      return true;
+    }
+  },
+
+  bedrooms: {
+    field: 'bedrooms',
+    required: true,
+    type: 'number' as const,
+    custom: (value: unknown) => {
+      if (typeof value !== 'number') return 'Bedrooms must be a number';
+      if (value < 0) return 'Bedrooms cannot be negative';
+      return true;
+    }
+  },
+
+  bathrooms: {
+    field: 'bathrooms',
+    required: true,
+    type: 'number' as const,
+    custom: (value: unknown) => {
+      if (typeof value !== 'number') return 'Bathrooms must be a number';
+      if (value < 0) return 'Bathrooms cannot be negative';
+      return true;
+    }
+  },
+
+  squareFootage: {
+    field: 'squareFootage',
+    required: true,
+    type: 'number' as const,
+    custom: (value: unknown) => {
+      if (typeof value !== 'number') return 'Square footage must be a number';
+      if (value < 1) return 'Square footage must be at least 1';
+      return true;
+    }
+  },
+
+  monthlyRent: {
+    field: 'monthlyRent',
+    required: true,
+    type: 'number' as const,
+    custom: (value: unknown) => {
+      if (typeof value !== 'number') return 'Monthly rent must be a number';
+      if (value < 0) return 'Monthly rent cannot be negative';
+      return true;
+    }
+  },
+
+  securityDeposit: {
+    field: 'securityDeposit',
+    required: true,
+    type: 'number' as const,
+    custom: (value: unknown) => {
+      if (typeof value !== 'number') return 'Security deposit must be a number';
+      if (value < 0) return 'Security deposit cannot be negative';
+      return true;
+    }
+  },
+
+
+
+  description: {
+    field: 'description',
+    required: true,
+    type: 'string' as const,
+    minLength: 10,
+    maxLength: 1000
+  },
+
+  parking: {
+    field: 'parking',
+    required: true,
+    type: 'string' as const,
+    custom: (value: unknown) => {
+      if (typeof value !== 'string') return 'Parking must be a string';
+      const validParking = ['street', 'driveway', 'garage', 'assigned', 'none'];
+      if (!validParking.includes(value)) {
+        return 'Parking must be one of: street, driveway, garage, assigned, none';
+      }
+      return true;
+    }
   }
 };
 

@@ -8,7 +8,8 @@ const UserSignUp = () => {
   const [email, setEmail] = useState('');
   const [fullName, setFullName] = useState('');
   const [username, setUsername] = useState('');
-  // const [role, setRole] = useState('');
+  const [role, setRole] = useState<'landlord' | 'tenant'>('landlord');
+  const [invitationCode, setInvitationCode] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const router = useRouter();
@@ -19,6 +20,12 @@ const UserSignUp = () => {
 
     if (password !== confirmPassword) {
       alert('Passwords do not match');
+      return;
+    }
+
+    // Validate invitation code for tenants
+    if (role === 'tenant' && !invitationCode.trim()) {
+      alert('Invitation code is required for tenant registration');
       return;
     }
 
@@ -33,7 +40,8 @@ const UserSignUp = () => {
           fullName,
           username,
           password,
-          role: "tenant",
+          role,
+          invitationCode: role === 'tenant' ? invitationCode : undefined,
         }),
       });
 
@@ -44,7 +52,8 @@ const UserSignUp = () => {
         setEmail('')
         setFullName('')
         setUsername('')
-        // setRole('')
+        setRole('landlord')
+        setInvitationCode('')
         setPassword('')
         setConfirmPassword('')
         router.push('/user/signin');
@@ -57,7 +66,6 @@ const UserSignUp = () => {
       } else {
         alert('Something went wrong');
       }
-      alert('Something went wrong.');
     }
   };
 
@@ -103,14 +111,38 @@ const UserSignUp = () => {
             <input type="text" value={username} onChange={(e) => setUsername(e.target.value)} placeholder="Enter username" className="w-full py-2 px-4 rounded-full text-black bg-white focus:outline-none" required />
           </div>
 
-          {/* <div className="mb-4">
+          <div className="mb-4">
             <label className="block mb-1 font-semibold">Role</label>
-            <select value={role} onChange={(e) => setRole(e.target.value)} className="w-full py-2 px-4 rounded-full text-black bg-white focus:outline-none" required>
-              <option value="">Select role</option>
-              <option value="tenant">Tenant</option>
+            <select 
+              value={role} 
+              onChange={(e) => {
+                setRole(e.target.value as 'landlord' | 'tenant');
+                if (e.target.value === 'landlord') {
+                  setInvitationCode(''); // Clear invitation code when switching to landlord
+                }
+              }} 
+              className="w-full py-2 px-4 rounded-full text-black bg-white focus:outline-none"
+              required
+            >
               <option value="landlord">Landlord</option>
+              <option value="tenant">Tenant</option>
             </select>
-          </div> */}
+          </div>
+
+          {role === 'tenant' && (
+            <div className="mb-4">
+              <label className="block mb-1 font-semibold">Invitation Code *</label>
+              <input 
+                type="text" 
+                value={invitationCode} 
+                onChange={(e) => setInvitationCode(e.target.value)} 
+                placeholder="Enter invitation code from landlord" 
+                className="w-full py-2 px-4 rounded-full text-black bg-white focus:outline-none" 
+                required 
+              />
+              <p className="text-xs text-gray-300 mt-1">You need an invitation code from a landlord to sign up as a tenant</p>
+            </div>
+          )}
 
           <div className="mb-4">
             <label className="block mb-1 font-semibold">Password</label>

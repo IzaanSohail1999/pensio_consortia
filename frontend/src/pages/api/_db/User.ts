@@ -7,6 +7,7 @@ export interface IUser extends Document {
   username: string;
   password: string;
   role: 'tenant' | 'landlord';
+  properties?: mongoose.Types.ObjectId[];
   matchPassword(enteredPassword: string): Promise<boolean>;
 }
 
@@ -16,6 +17,7 @@ const UserSchema = new Schema<IUser>({
   username: { type: String, required: true, unique: true },
   password: { type: String, required: true },
   role: { type: String, enum: ['tenant', 'landlord'], required: true },
+  properties: [{ type: Schema.Types.ObjectId, ref: 'Property' }],
 }, { timestamps: true });
 
 UserSchema.methods.matchPassword = async function (enteredPassword: string) {

@@ -34,8 +34,6 @@ export function validateEnvironmentVariables() {
       'MONGO_URI must be a valid MongoDB connection string starting with mongodb:// or mongodb+srv://'
     );
   }
-
-  console.log('✅ Environment variables validated successfully');
 }
 
 export function getEnvironmentConfig() {

@@ -16,9 +16,9 @@ export default function App({ Component, pageProps }: AppProps) {
 
   useEffect(() => {
     if (typeof window !== 'undefined') {
-      // const storedRole = localStorage.getItem('userRole');
-      // if (storedRole) setUserRole(storedRole); commented to only set tenant
-      setUserRole('tenant')
+      const storedRole = localStorage.getItem('userRole');
+      if (storedRole) setUserRole(storedRole);
+      // setUserRole('tenant')
     }
   }, []);
 
