@@ -13,12 +13,13 @@ import { AdminProvider } from '@/context/AdminContext';
 export default function App({ Component, pageProps }: AppProps) {
   const router = useRouter();
   const [userRole, setUserRole] = useState<string | null>(null);
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     if (typeof window !== 'undefined') {
       const storedRole = localStorage.getItem('userRole');
       if (storedRole) setUserRole(storedRole);
-      // setUserRole('tenant')
+      setIsLoading(false);
     }
   }, []);
 
@@ -29,6 +30,18 @@ export default function App({ Component, pageProps }: AppProps) {
   const isUserRoute = router.pathname.startsWith('/user') &&
     !router.pathname.includes('/signin') &&
     !router.pathname.includes('/signup');
+
+  // Show loading state while determining user role
+  if (isLoading && (isUserRoute || isAdminRoute)) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-gray-100">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto mb-4"></div>
+          <p className="text-gray-600">Loading...</p>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <>
