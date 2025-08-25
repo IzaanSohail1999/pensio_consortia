@@ -25,10 +25,12 @@ This system implements comprehensive validation rules to prevent duplicate invit
   - Expired invitations are automatically marked as `expired`
   - New invitations can be sent to tenants with expired invitations
 
-### 4. **One Property Per Tenant**
-- **Rule**: Each property can only have one active invitation at a time
-- **Message**: "This property already has an active invitation. Only one tenant can be invited per property."
-- **Implementation**: Checks if property has `status: { $in: ['pending', 'accepted'] }`
+### 4. **Multiple Tenants Per Property (Updated)**
+- **Rule**: Landlords can now invite multiple tenants to the same property
+- **Previous Restriction**: Commented out - landlords were limited to one tenant per property
+- **Current Status**: Multiple invitations can be sent to the same property
+- **Note**: This allows for more flexible property management and tenant selection
+- **Code Status**: Original restriction code is commented out and can be easily re-enabled if needed
 
 ## Implementation Details
 

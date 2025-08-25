@@ -1043,11 +1043,14 @@ const PropertiesPage = () => {
                      Invite a tenant to view and apply for <span className="font-semibold text-white">{selectedProperty.name}</span>
                    </p>
                    {/* Check if property already has an active invitation */}
+                   {/* COMMENTED OUT: Landlords can now invite multiple tenants to the same property */}
+                   {/*
                    {invitations.some(inv => inv.status === 'pending' || inv.status === 'accepted') && (
                      <div className="mt-2 p-2 bg-yellow-100 border border-yellow-400 text-yellow-800 rounded text-xs">
                        ⚠️ This property already has an active invitation. Only one tenant can be invited per property.
                      </div>
                    )}
+                   */}
                  </div>
 
                                  {/* Invitation Status List */}
@@ -1112,7 +1115,6 @@ const PropertiesPage = () => {
                        placeholder="tenant@example.com"
                        className="w-full px-3 py-2 rounded-md text-black bg-white focus:outline-none focus:ring-2 focus:ring-blue-500"
                        required
-                       disabled={invitations.some(inv => inv.status === 'pending' || inv.status === 'accepted')}
                      />
                    </div>
 
@@ -1131,7 +1133,7 @@ const PropertiesPage = () => {
                      </button>
                      <button
                        type="submit"
-                       disabled={isInviting || invitations.some(inv => inv.status === 'pending' || inv.status === 'accepted')}
+                       disabled={isInviting}
                        className="flex-1 bg-green-600 text-white py-2 px-4 rounded-md hover:bg-green-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
                      >
                        {isInviting ? 'Sending...' : 'Send Invitation'}

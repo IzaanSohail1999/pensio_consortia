@@ -23,6 +23,19 @@ const UserSignUp = () => {
       return;
     }
 
+    // Validate password strength
+    const passwordErrors = [];
+    if (password.length < 8) passwordErrors.push('Password must be at least 8 characters long');
+    if (!/[A-Z]/.test(password)) passwordErrors.push('Password must contain at least one uppercase letter');
+    if (!/[a-z]/.test(password)) passwordErrors.push('Password must contain at least one lowercase letter');
+    if (!/[0-9]/.test(password)) passwordErrors.push('Password must contain at least one number');
+    if (!/[!@#$%^&*(),.?":{}|<>]/.test(password)) passwordErrors.push('Password must contain at least one special character');
+
+    if (passwordErrors.length > 0) {
+      alert('Password requirements not met:\n' + passwordErrors.join('\n'));
+      return;
+    }
+
     // Validate invitation code for tenants
     if (role === 'tenant' && !invitationCode.trim()) {
       alert('Invitation code is required for tenant registration');
@@ -147,6 +160,31 @@ const UserSignUp = () => {
           <div className="mb-4">
             <label className="block mb-1 font-semibold">Password</label>
             <input type="password" value={password} onChange={(e) => setPassword(e.target.value)} placeholder="Enter password" className="w-full py-2 px-4 rounded-full text-black bg-white focus:outline-none" required />
+            <div className="mt-2 p-3 bg-gray-800 rounded-md border border-gray-600">
+              <p className="text-xs text-gray-300 mb-2 font-medium">Password Requirements:</p>
+              <ul className="text-xs text-gray-400 space-y-1">
+                <li className={`flex items-center ${password.length >= 8 ? 'text-green-400' : 'text-gray-400'}`}>
+                  <span className="mr-2">{password.length >= 8 ? '✓' : '○'}</span>
+                  At least 8 characters long
+                </li>
+                <li className={`flex items-center ${/[A-Z]/.test(password) ? 'text-green-400' : 'text-gray-400'}`}>
+                  <span className="mr-2">{/[A-Z]/.test(password) ? '✓' : '○'}</span>
+                  Contains uppercase letter (A-Z)
+                </li>
+                <li className={`flex items-center ${/[a-z]/.test(password) ? 'text-green-400' : 'text-gray-400'}`}>
+                  <span className="mr-2">{/[a-z]/.test(password) ? '✓' : '○'}</span>
+                  Contains lowercase letter (a-z)
+                </li>
+                <li className={`flex items-center ${/[0-9]/.test(password) ? 'text-green-400' : 'text-gray-400'}`}>
+                  <span className="mr-2">{/[0-9]/.test(password) ? '✓' : 'text-gray-400'}</span>
+                  Contains number (0-9)
+                </li>
+                <li className={`flex items-center ${/[!@#$%^&*(),.?":{}|<>]/.test(password) ? 'text-green-400' : 'text-gray-400'}`}>
+                  <span className="mr-2">{/[!@#$%^&*(),.?":{}|<>]/.test(password) ? '✓' : '○'}</span>
+                  Contains special character (!@#$%^&*)
+                </li>
+              </ul>
+            </div>
           </div>
 
           <div className="mb-6">

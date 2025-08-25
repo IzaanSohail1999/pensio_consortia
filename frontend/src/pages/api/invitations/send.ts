@@ -85,6 +85,8 @@ async function sendInvitationHandler(req: SendInvitationRequest, res: NextApiRes
     }
 
     // 3. Check if there's already an active invitation for this specific property (limit to one tenant per property)
+    // COMMENTED OUT: Landlords can now invite multiple tenants to the same property
+    /*
     const existingPropertyInvitation = await Invitation.findOne({
       propertyId,
       status: { $in: ['pending', 'accepted'] },
@@ -97,6 +99,7 @@ async function sendInvitationHandler(req: SendInvitationRequest, res: NextApiRes
         message: 'This property already has an active invitation. Only one tenant can be invited per property.'
       });
     }
+    */
 
     // Generate unique invitation code (6 characters)
     const invitationCode = crypto.randomBytes(3).toString('hex').toUpperCase();
